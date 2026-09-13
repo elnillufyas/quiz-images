@@ -8,17 +8,24 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Кто хочет стать миллионером</title>
 
-<!-- Прогрев кэша jsDelivr для всех картинок — v=2 обходит старый плохой кэш -->
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/1.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/2.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/3.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/4.jpeg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/5.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/6.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/7.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/8.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/9.jpg?v=2">
-<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/10.jpg?v=2">
+<!-- Прогрев кэша для всех 17 картинок -->
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/1.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/2.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/3.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/4.jpeg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/5.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/6.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/7.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/8.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/9.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/10.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/11%20%D0%B6%D0%B4%D1%83%D0%BB%D1%8F.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/12%20%D0%B6%D0%B4%D1%83%D0%BB%D1%8F.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/13%20%D0%B6%D0%B4%D1%83%D0%BB%D1%8F.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/14%20%D0%BC%D0%B0%D0%BC%D0%B0%20%D0%B2%2016.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/15%20%D0%BC%D0%B0%D0%BC%D0%B0%20%D0%B2%2016.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/16%20%D0%B1%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B0%20%D0%BF%D0%BE%20%D0%BE%D0%B1%D0%BC%D0%B0%D0%BD%D1%83.jpg?v=3">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/17%20%D0%B1%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%B0%20%D0%BF%D0%BE%20%D0%BE%D0%B1%D0%BC%D0%B0%D0%BD%D1%83.jpg?v=3">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -192,36 +199,68 @@ window.addEventListener('error', function(e){
 });
 
 /* =========================================================
-   КАРТИНКИ — прямые CDN-ссылки через jsDelivr (GitHub)
-   Параметр ?v=2 обходит старый сбойный кэш jsDelivr
+   КАРТИНКИ — jsDelivr + GitHub
+   Имена файлов с кириллицей и пробелами кодируются через
+   encodeURIComponent, чтобы iOS Safari их точно нашёл.
    ========================================================= */
-const V = "?v=2";
-const IMG1  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/1.jpg"  + V;
-const IMG2  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/2.jpg"  + V;
-const IMG3  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/3.jpg"  + V;
-const IMG4  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/4.jpeg" + V;
-const IMG5  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/5.jpg"  + V;
-const IMG6  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/6.jpg"  + V;
-const IMG7  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/7.jpg"  + V;
-const IMG8  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/8.jpg"  + V;
-const IMG9  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/9.jpg"  + V;
-const IMG10 = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/10.jpg" + V;
+const CDN_BASE = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/";
+const V = "?v=3"; // если заменишь файлы — поднимай версию (v=4, v=5, ...)
+
+function cdn(fileName){
+  return CDN_BASE + encodeURIComponent(fileName) + V;
+}
+
+/* Старые 10 картинок */
+const IMG1  = cdn("1.jpg");
+const IMG2  = cdn("2.jpg");
+const IMG3  = cdn("3.jpg");
+const IMG4  = cdn("4.jpeg");
+const IMG5  = cdn("5.jpg");
+const IMG6  = cdn("6.jpg");
+const IMG7  = cdn("7.jpg");
+const IMG8  = cdn("8.jpg");
+const IMG9  = cdn("9.jpg");
+const IMG10 = cdn("10.jpg");
+
+/* 7 новых картинок */
+const IMG11 = cdn("11 ждуля.jpg");
+const IMG12 = cdn("12 ждуля.jpg");
+const IMG13 = cdn("13 ждуля.jpg");
+const IMG14 = cdn("14 мама в 16.jpg");
+const IMG15 = cdn("15 мама в 16.jpg");
+const IMG16 = cdn("16 беремена по обману.jpg");
+const IMG17 = cdn("17 беремена по обману.jpg");
 
 const OPTIONS = ["ждуля", "беременна в 16", "беременна по обману"];
 const LETTERS = ["А", "Б", "В"];
 
+/* =========================================================
+   ПУЛ ВОПРОСОВ — 17 картинок
+   Игра вытягивает 10 случайных при каждом запуске.
+   ========================================================= */
 const QUESTION_POOL = [
   { image: IMG1,  correct: "беременна в 16" },
-  { image: IMG8,  correct: "ждуля" },
-  { image: IMG5,  correct: "беременна по обману" },
   { image: IMG2,  correct: "беременна в 16" },
-  { image: IMG9,  correct: "ждуля" },
-  { image: IMG6,  correct: "беременна по обману" },
   { image: IMG3,  correct: "беременна в 16" },
-  { image: IMG10, correct: "ждуля" },
+  { image: IMG4,  correct: "беременна в 16" },
+  { image: IMG5,  correct: "беременна по обману" },
+  { image: IMG6,  correct: "беременна по обману" },
   { image: IMG7,  correct: "беременна по обману" },
-  { image: IMG4,  correct: "беременна в 16" }
+  { image: IMG8,  correct: "ждуля" },
+  { image: IMG9,  correct: "ждуля" },
+  { image: IMG10, correct: "ждуля" },
+
+  { image: IMG11, correct: "ждуля" },
+  { image: IMG12, correct: "ждуля" },
+  { image: IMG13, correct: "ждуля" },
+  { image: IMG14, correct: "беременна в 16" },
+  { image: IMG15, correct: "беременна в 16" },
+  { image: IMG16, correct: "беременна по обману" },
+  { image: IMG17, correct: "беременна по обману" }
 ];
+
+/* Сколько вопросов в одной партии */
+const QUESTIONS_PER_GAME = 10;
 
 const TIMER_SECONDS = 20;
 
@@ -241,9 +280,9 @@ const warnBanner    = document.getElementById('warn-banner');
 /* ---------- State ---------- */
 let state = { idx: 0, score: 0, locked: false, finished: false, timerId: null, timeLeft: TIMER_SECONDS };
 let totalScore = 0;
-
 let sessionQuestions = [];
 
+/* Перемешивание (Фишер–Йетс) */
 function shuffleArray(arr){
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--){
@@ -253,9 +292,12 @@ function shuffleArray(arr){
   return a;
 }
 
+/* Собираем партию: 10 случайных вопросов из пула,
+   суммы идут строго 100, 200, 300 … 1000 */
 function buildSession(){
   const shuffled = shuffleArray(QUESTION_POOL);
-  return shuffled.map((q, i) => ({
+  const picked = shuffled.slice(0, QUESTIONS_PER_GAME);
+  return picked.map((q, i) => ({
     value: (i + 1) * 100,
     image: q.image,
     correct: q.correct
@@ -383,9 +425,8 @@ function renderLadder(){
   if (cur && cur.scrollIntoView) cur.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
 }
 
-/* ---------- Показать картинку вопроса ---------- */
+/* ---------- Показ картинки вопроса ---------- */
 function displayQuestionImage(url, number){
-  // Ставим состояние загрузки
   mPlaceholder.style.display = 'flex';
   mPlaceholder.innerHTML =
     '<div class="ph-num">' + number + '</div>' +
@@ -397,6 +438,7 @@ function displayQuestionImage(url, number){
   mImage.removeAttribute('src');
   mImage.onload = null;
   mImage.onerror = null;
+  delete mImage.dataset.retried;
 
   mImage.onload = function(){
     mImage.style.display = 'block';
@@ -404,14 +446,12 @@ function displayQuestionImage(url, number){
   };
 
   mImage.onerror = function(){
-    // Одна повторная попытка с обходом кэша
     const retryUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'r=' + Date.now();
     if (!mImage.dataset.retried){
       mImage.dataset.retried = '1';
       mImage.src = retryUrl;
       return;
     }
-    // Вторая попытка тоже провалилась — показываем кнопку «Повторить»
     delete mImage.dataset.retried;
     mPlaceholder.innerHTML =
       '<div class="ph-num">' + number + '</div>' +
@@ -435,7 +475,6 @@ function showQuestion(){
 
   displayQuestionImage(q.image, number);
 
-  // Кнопки ответа
   optionsEl.innerHTML = '';
   OPTIONS.forEach((opt, i) => {
     const btn = document.createElement('button');
