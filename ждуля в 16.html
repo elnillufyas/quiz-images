@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070b16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Кто хочет стать миллионером</title>
+
+<!-- Прогрев кэша jsDelivr для всех картинок — v=2 обходит старый плохой кэш -->
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/1.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/2.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/3.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/4.jpeg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/5.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/6.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/7.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/8.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/9.jpg?v=2">
+<link rel="preload" as="image" href="https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/10.jpg?v=2">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;height:-webkit-fill-available}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#070b16 radial-gradient(circle at 50% 0%,#16223f 0%,#070b16 65%) fixed;
+  color:#e8eeff;
+  min-height:100vh;min-height:-webkit-fill-available;height:100dvh;
+  display:flex;flex-direction:column;
+  padding:calc(8px + env(safe-area-inset-top)) 8px calc(8px + env(safe-area-inset-bottom));
+  gap:8px;overflow:hidden;overscroll-behavior:none;
+  -webkit-user-select:none;user-select:none;
+}
+#err-banner{
+  display:none;position:fixed;left:0;right:0;top:0;
+  background:#b91c1c;color:#fff;padding:8px 12px;font-size:12px;
+  z-index:9999;font-family:monospace;white-space:pre-wrap;
+}
+header{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-shrink:0}
+.hud{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.hud-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#93b4ff;font-weight:700}
+.hud-value{font-size:16px;font-weight:800;color:#e8eeff}
+.score-box{position:relative;display:flex;align-items:baseline;gap:6px;background:linear-gradient(135deg,#16265c,#1e3a8a);border:1px solid rgba(96,165,250,.35);border-radius:12px;padding:6px 12px;box-shadow:0 4px 18px rgba(30,64,175,.35)}
+.score-gold{color:#fbbf24 !important;font-size:18px}
+.btn-icon{background:rgba(255,255,255,.06);border:1px solid rgba(147,180,255,.25);color:#b9cbff;font-family:inherit;font-size:16px;font-weight:700;width:42px;height:42px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .1s,opacity .2s;touch-action:manipulation}
+.btn-icon:active{transform:scale(.92);background:rgba(255,255,255,.12)}
+.btn-icon.muted{opacity:.4}
+
+.warn-banner{
+  flex-shrink:0;font-size:11px;line-height:1.4;
+  background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);
+  color:#fcd34d;border-radius:10px;padding:8px 10px;
+}
+
+.ladder{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;-ms-overflow-style:none;flex-shrink:0;-webkit-overflow-scrolling:touch}
+.ladder::-webkit-scrollbar{display:none}
+.step{flex-shrink:0;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;background:rgba(255,255,255,.04);color:#6b85c4;border:1px solid rgba(96,165,250,.15);transition:all .3s;white-space:nowrap}
+.step.done{background:linear-gradient(135deg,#065f46,#10b981);color:#fff;border-color:#34d399;box-shadow:0 0 12px rgba(16,185,129,.55)}
+.step.current{background:linear-gradient(135deg,#b45309,#fbbf24);color:#1a1a1a;border-color:#fcd34d;transform:scale(1.1);animation:stepPulse 1.6s ease-in-out infinite}
+@keyframes stepPulse{0%,100%{box-shadow:0 0 18px rgba(251,191,36,.75)}50%{box-shadow:0 0 30px rgba(251,191,36,1)}}
+.step.wrong-step{background:linear-gradient(135deg,#7f1d1d,#ef4444);color:#fff;border-color:#f87171;box-shadow:0 0 18px rgba(239,68,68,.7)}
+
+.game{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.q-card{flex:1;min-height:150px;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;background:linear-gradient(165deg,#16264f,#0b1226);border:1px solid rgba(96,165,250,.3);box-shadow:0 10px 40px rgba(0,0,0,.5);position:relative}
+.q-card.shake{animation:shake .5s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+.q-image{
+  flex:1;min-height:150px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:#0a1020;
+}
+.q-image img{
+  width:100%;height:100%;
+  object-fit:contain;display:block;
+}
+.q-image .placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;text-align:center;padding:16px;
+  color:#93b4ff;font-weight:700;font-size:15px;
+}
+.q-image .placeholder .ph-num{
+  font-size:44px;font-weight:900;color:#fbbf24;line-height:1;
+}
+.q-image .placeholder .ph-note{
+  font-size:12px;color:#5b7bd6;font-weight:600;
+}
+.q-image .placeholder .ph-spinner{
+  width:26px;height:26px;border-radius:50%;
+  border:3px solid rgba(147,180,255,.25);
+  border-top-color:#60a5fa;
+  animation:spin .9s linear infinite;
+  margin-top:4px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.timer-bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.06)}
+.timer-fill{height:100%;width:100%;background:linear-gradient(90deg,#4f86ff,#60a5fa);transition:width .1s linear,background .3s}
+.timer-fill.danger{background:linear-gradient(90deg,#ef4444,#f87171);animation:timerDanger .6s ease-in-out infinite}
+@keyframes timerDanger{0%,100%{opacity:1}50%{opacity:.5}}
+
+.options{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.option{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:14px;
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8);
+  border:1px solid rgba(96,165,250,.35);
+  color:#fff;font-family:inherit;font-size:15px;font-weight:700;
+  text-align:left;cursor:pointer;
+  transition:transform .1s,background .2s,box-shadow .2s,opacity .3s,border-color .2s;
+  box-shadow:0 4px 14px rgba(30,64,175,.35);touch-action:manipulation;
+}
+.option:active{transform:scale(.98)}
+.option .letter{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);font-size:14px;font-weight:900;flex-shrink:0;color:#fbbf24}
+.option.correct{background:linear-gradient(135deg,#059669,#10b981);border-color:#34d399;box-shadow:0 0 26px rgba(16,185,129,.6);transform:scale(1.02)}
+.option.correct .letter{color:#fff;background:rgba(255,255,255,.25)}
+.option.wrong{background:linear-gradient(135deg,#b91c1c,#ef4444);border-color:#f87171;box-shadow:0 0 26px rgba(239,68,68,.6)}
+.option.wrong .letter{color:#fff;background:rgba(255,255,255,.25)}
+.option.dimmed{opacity:.28}
+.option:disabled{cursor:default;transform:none}
+
+.score-pop{position:absolute;left:100%;top:50%;margin-left:6px;transform:translateY(-50%);font-size:16px;font-weight:900;pointer-events:none;animation:scorePop 1.3s ease-out forwards;text-shadow:0 2px 10px rgba(0,0,0,.7);white-space:nowrap}
+.score-pop.plus{color:#34d399}
+.score-pop.minus{color:#f87171}
+@keyframes scorePop{
+  0%{opacity:0;transform:translateY(-50%) scale(.6)}
+  20%{opacity:1;transform:translateY(-50%) scale(1.2)}
+  70%{opacity:1;transform:translateY(-90%) scale(1)}
+  100%{opacity:0;transform:translateY(-150%) scale(.9)}
+}
+
+.end-screen{position:fixed;inset:0;background:rgba(4,7,16,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;z-index:200;animation:fadeIn .35s ease;overflow-y:auto;-webkit-overflow-scrolling:touch}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.end-card{width:100%;max-width:420px;padding:26px 20px;background:linear-gradient(165deg,#16264f,#0b1226);border:1px solid rgba(251,191,36,.4);border-radius:22px;text-align:center;display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 80px rgba(0,0,0,.8);animation:endPop .45s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes endPop{from{transform:scale(.85);opacity:.3}to{transform:scale(1);opacity:1}}
+.end-emoji{font-size:56px;line-height:1}
+.end-title{font-size:19px;font-weight:900;color:#fbbf24;letter-spacing:.02em}
+.end-score{font-size:46px;font-weight:900;color:#fbbf24;line-height:1;text-shadow:0 4px 24px rgba(251,191,36,.5)}
+.end-score-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#93b4ff;font-weight:700}
+.end-rank{padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(251,191,36,.06));border:1px solid rgba(96,165,250,.3);font-size:14px;line-height:1.45;color:#e8eeff;font-weight:600}
+.end-rank .rank-name{display:block;font-size:16px;font-weight:900;color:#fbbf24;margin-bottom:6px}
+.end-desc{color:#93b4ff;font-size:13px;line-height:1.4}
+.btn-play{margin-top:4px;border:none;border-radius:15px;padding:16px;font-family:inherit;font-size:16px;font-weight:800;color:#1a1a1a;cursor:pointer;background:linear-gradient(135deg,#fbbf24,#f59e0b);box-shadow:0 10px 26px rgba(251,191,36,.4);touch-action:manipulation}
+.btn-play:active{transform:scale(.97);filter:brightness(1.1)}
+.confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:150}
+</style>
+</head>
+<body>
+
+<div id="err-banner"></div>
+
+<header>
+  <div class="hud">
+    <span class="hud-label">Вопрос</span>
+    <span class="hud-value" id="q-counter">1 / 10</span>
+  </div>
+  <div class="score-box">
+    <span class="hud-label">💰</span>
+    <span class="hud-value score-gold" id="score">0</span>
+  </div>
+  <button class="btn-icon" id="btn-sound" title="Звук">🔊</button>
+  <button class="btn-icon" id="reset" title="Сброс">↻</button>
+</header>
+
+<div class="warn-banner" id="warn-banner" style="display:none"></div>
+<div class="ladder" id="ladder"></div>
+
+<main class="game">
+  <div class="q-card" id="q-card">
+    <div class="q-image">
+      <img id="m-image" alt="" style="display:none">
+      <div class="placeholder" id="m-placeholder">
+        <div class="ph-num">1</div>
+        <div class="ph-note">Загрузка…</div>
+      </div>
+      <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
+    </div>
+  </div>
+  <div class="options" id="options"></div>
+</main>
+
+<script>
+/* ---------- Ловим ошибки ---------- */
+window.addEventListener('error', function(e){
+  var b = document.getElementById('err-banner');
+  if (b){
+    b.style.display = 'block';
+    b.textContent = 'ОШИБКА JS: ' + (e.message || e.error || 'unknown');
+  }
+});
+
+/* =========================================================
+   КАРТИНКИ — прямые CDN-ссылки через jsDelivr (GitHub)
+   Параметр ?v=2 обходит старый сбойный кэш jsDelivr
+   ========================================================= */
+const V = "?v=2";
+const IMG1  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/1.jpg"  + V;
+const IMG2  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/2.jpg"  + V;
+const IMG3  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/3.jpg"  + V;
+const IMG4  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/4.jpeg" + V;
+const IMG5  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/5.jpg"  + V;
+const IMG6  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/6.jpg"  + V;
+const IMG7  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/7.jpg"  + V;
+const IMG8  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/8.jpg"  + V;
+const IMG9  = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/9.jpg"  + V;
+const IMG10 = "https://cdn.jsdelivr.net/gh/elnillufyas/quiz-images@main/10.jpg" + V;
+
+const OPTIONS = ["ждуля", "беременна в 16", "беременна по обману"];
+const LETTERS = ["А", "Б", "В"];
+
+const QUESTION_POOL = [
+  { image: IMG1,  correct: "беременна в 16" },
+  { image: IMG8,  correct: "ждуля" },
+  { image: IMG5,  correct: "беременна по обману" },
+  { image: IMG2,  correct: "беременна в 16" },
+  { image: IMG9,  correct: "ждуля" },
+  { image: IMG6,  correct: "беременна по обману" },
+  { image: IMG3,  correct: "беременна в 16" },
+  { image: IMG10, correct: "ждуля" },
+  { image: IMG7,  correct: "беременна по обману" },
+  { image: IMG4,  correct: "беременна в 16" }
+];
+
+const TIMER_SECONDS = 20;
+
+const ladderEl      = document.getElementById('ladder');
+const qCounter      = document.getElementById('q-counter');
+const scoreEl       = document.getElementById('score');
+const scoreBox      = document.querySelector('.score-box');
+const qCard         = document.getElementById('q-card');
+const mImage        = document.getElementById('m-image');
+const mPlaceholder  = document.getElementById('m-placeholder');
+const timerFill     = document.getElementById('timer-fill');
+const optionsEl     = document.getElementById('options');
+const btnReset      = document.getElementById('reset');
+const btnSound      = document.getElementById('btn-sound');
+const warnBanner    = document.getElementById('warn-banner');
+
+/* ---------- State ---------- */
+let state = { idx: 0, score: 0, locked: false, finished: false, timerId: null, timeLeft: TIMER_SECONDS };
+let totalScore = 0;
+
+let sessionQuestions = [];
+
+function shuffleArray(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildSession(){
+  const shuffled = shuffleArray(QUESTION_POOL);
+  return shuffled.map((q, i) => ({
+    value: (i + 1) * 100,
+    image: q.image,
+    correct: q.correct
+  }));
+}
+
+/* ---------- Звук ---------- */
+let soundEnabled = true;
+try {
+  const saved = localStorage.getItem('quiz_sound');
+  if (saved === 'off') soundEnabled = false;
+} catch(e){}
+
+function updateSoundBtn(){
+  btnSound.textContent = soundEnabled ? '🔊' : '🔇';
+  btnSound.classList.toggle('muted', !soundEnabled);
+}
+updateSoundBtn();
+
+btnSound.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  try { localStorage.setItem('quiz_sound', soundEnabled ? 'on' : 'off'); } catch(e){}
+  updateSoundBtn();
+  if (soundEnabled) playCorrect();
+});
+
+let audioCtx = null;
+function ensureAudio(){
+  if (audioCtx) return audioCtx;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    audioCtx = new AC();
+  } catch(e){ audioCtx = null; }
+  return audioCtx;
+}
+function unlockAudioOnFirstGesture(){
+  const ctx = ensureAudio();
+  if (ctx && ctx.state === 'suspended') ctx.resume().catch(()=>{});
+}
+document.addEventListener('touchstart', unlockAudioOnFirstGesture, {once:true, passive:true});
+document.addEventListener('click',      unlockAudioOnFirstGesture, {once:true});
+
+function playTone(notes, type, duration, volume){
+  if (!soundEnabled) return;
+  const ctx = ensureAudio(); if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume().catch(()=>{});
+  const now = ctx.currentTime;
+  notes.forEach((freq, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, now + i*0.09);
+    g.gain.setValueAtTime(0, now + i*0.09);
+    g.gain.linearRampToValueAtTime(volume || 0.22, now + i*0.09 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.09 + (duration || 0.4));
+    o.connect(g).connect(ctx.destination);
+    o.start(now + i*0.09);
+    o.stop(now + i*0.09 + (duration || 0.4) + 0.1);
+  });
+}
+function playCorrect(){ playTone([660, 880, 1320], 'sine', 0.4, 0.22); }
+function playWrong(){
+  if (!soundEnabled) return;
+  const ctx = ensureAudio(); if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume().catch(()=>{});
+  const now = ctx.currentTime;
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sawtooth';
+  o.frequency.setValueAtTime(200, now);
+  o.frequency.exponentialRampToValueAtTime(70, now + 0.5);
+  g.gain.setValueAtTime(0, now);
+  g.gain.linearRampToValueAtTime(0.2, now + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+  o.connect(g).connect(ctx.destination);
+  o.start(now);
+  o.stop(now + 0.6);
+}
+function playWin(){ playTone([523, 659, 784, 1046, 1318], 'triangle', 0.45, 0.25); }
+function vibrate(pattern){
+  if (!soundEnabled) return;
+  if (navigator.vibrate) { try { navigator.vibrate(pattern); } catch(e){} }
+}
+
+/* ---------- Регалии ---------- */
+function getRank(correctCount, totalCorrect, won){
+  if (won) return {
+    name: '🏆 Великий Гуру Треш-Шоу',
+    desc: 'Ты знаешь про «ждулю», «беременна в 16» и «по обману» больше, чем вся съёмочная группа вместе взятая. Тебе можно доверить защиту диссертации по этому жанру.'
+  };
+  if (correctCount >= 8) return {
+    name: '🎖️ Эксперт. Всё свободное время тратишь на просмотр треш-шоу',
+    desc: 'Ты почти не ошибся. Такое чувство, что ты сам был в этой студии. Пора уже вести собственный YouTube-канал с разборами.'
+  };
+  if (correctCount >= 6) return {
+    name: '🍿 Продвинутый зритель',
+    desc: 'Смотришь не всё подряд, но в курсе последних сезонов. Можешь смело комментировать в чате.'
+  };
+  if (correctCount >= 4) return {
+    name: '📺 Уверенный любитель',
+    desc: 'Что-то видел, что-то слышал. Остальное — угадал по интуиции. Неплохо!'
+  };
+  if (correctCount >= 2) return {
+    name: '🌱 Начинающий зритель',
+    desc: 'Тебе ещё предстоит узнать, что такое «ждуля» и с чем её едят. Но начало положено.'
+  };
+  return {
+    name: '🤷 Случайный прохожий',
+    desc: 'Ты зашёл, посмотрел и вышел. Возможно, это и к лучшему — не всякий выдержит такие сериалы.'
+  };
+}
+
+/* ---------- Ladder ---------- */
+function renderLadder(){
+  ladderEl.innerHTML = '';
+  sessionQuestions.forEach((q, i) => {
+    const el = document.createElement('div');
+    el.className = 'step';
+    el.textContent = q.value;
+    if (state.finished && i === state.idx && state.score < q.value) el.classList.add('wrong-step');
+    else if (i < state.idx) el.classList.add('done');
+    else if (i === state.idx && !state.finished) el.classList.add('current');
+    ladderEl.appendChild(el);
+  });
+  const cur = ladderEl.querySelector('.current, .wrong-step');
+  if (cur && cur.scrollIntoView) cur.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+}
+
+/* ---------- Показать картинку вопроса ---------- */
+function displayQuestionImage(url, number){
+  // Ставим состояние загрузки
+  mPlaceholder.style.display = 'flex';
+  mPlaceholder.innerHTML =
+    '<div class="ph-num">' + number + '</div>' +
+    '<div class="ph-note">Загрузка картинки…</div>' +
+    '<div class="ph-spinner"></div>';
+  mPlaceholder.onclick = null;
+
+  mImage.style.display = 'none';
+  mImage.removeAttribute('src');
+  mImage.onload = null;
+  mImage.onerror = null;
+
+  mImage.onload = function(){
+    mImage.style.display = 'block';
+    mPlaceholder.style.display = 'none';
+  };
+
+  mImage.onerror = function(){
+    // Одна повторная попытка с обходом кэша
+    const retryUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 'r=' + Date.now();
+    if (!mImage.dataset.retried){
+      mImage.dataset.retried = '1';
+      mImage.src = retryUrl;
+      return;
+    }
+    // Вторая попытка тоже провалилась — показываем кнопку «Повторить»
+    delete mImage.dataset.retried;
+    mPlaceholder.innerHTML =
+      '<div class="ph-num">' + number + '</div>' +
+      '<div class="ph-note">Не удалось загрузить.<br>Нажми, чтобы повторить.</div>';
+    mPlaceholder.onclick = function(){
+      mPlaceholder.onclick = null;
+      displayQuestionImage(url, number);
+    };
+  };
+
+  mImage.src = url;
+}
+
+/* ---------- Показ вопроса ---------- */
+function showQuestion(){
+  if (state.idx >= sessionQuestions.length){ endGame(true); return; }
+
+  const q = sessionQuestions[state.idx];
+  const number = state.idx + 1;
+  qCounter.textContent = number + " / " + sessionQuestions.length;
+
+  displayQuestionImage(q.image, number);
+
+  // Кнопки ответа
+  optionsEl.innerHTML = '';
+  OPTIONS.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option';
+
+    const letterSpan = document.createElement('span');
+    letterSpan.className = 'letter';
+    letterSpan.textContent = LETTERS[i];
+
+    const textSpan = document.createElement('span');
+    textSpan.textContent = opt;
+
+    btn.appendChild(letterSpan);
+    btn.appendChild(textSpan);
+    btn.addEventListener('click', () => selectOption(btn, opt, q.correct));
+    optionsEl.appendChild(btn);
+  });
+
+  state.locked = false;
+  startTimer();
+}
+
+/* ---------- Таймер ---------- */
+function startTimer(){
+  clearInterval(state.timerId);
+  state.timeLeft = TIMER_SECONDS;
+  updateTimerBar();
+  state.timerId = setInterval(() => {
+    state.timeLeft -= 0.1;
+    if (state.timeLeft <= 0){
+      state.timeLeft = 0;
+      updateTimerBar();
+      clearInterval(state.timerId);
+      timeUp();
+    } else {
+      updateTimerBar();
+    }
+  }, 100);
+}
+function updateTimerBar(){
+  const pct = (state.timeLeft / TIMER_SECONDS) * 100;
+  timerFill.style.width = pct + '%';
+  timerFill.classList.toggle('danger', state.timeLeft <= 5);
+}
+function stopTimer(){ clearInterval(state.timerId); state.timerId = null; }
+
+function timeUp(){
+  if (state.locked || state.finished) return;
+  state.locked = true;
+  const q = sessionQuestions[state.idx];
+  optionsEl.querySelectorAll('.option').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent.indexOf(q.correct) !== -1) btn.classList.add('correct');
+    else btn.classList.add('dimmed');
+  });
+  qCard.classList.add('shake');
+  setTimeout(() => qCard.classList.remove('shake'), 500);
+  playWrong();
+  vibrate([100, 50, 100]);
+  setTimeout(() => endGame(false, 'Время вышло'), 1600);
+}
+
+/* ---------- Ответ ---------- */
+function selectOption(chosenBtn, option, correctOption){
+  if (state.locked || state.finished) return;
+  state.locked = true;
+  stopTimer();
+
+  const isCorrect = option === correctOption;
+  const q = sessionQuestions[state.idx];
+  const delta = isCorrect ? q.value : -q.value;
+
+  optionsEl.querySelectorAll('.option').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent.indexOf(correctOption) !== -1) btn.classList.add('correct');
+    else if (btn === chosenBtn) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+
+  totalScore += delta;
+  state.score = totalScore;
+  scoreEl.textContent = String(totalScore);
+  scoreEl.classList.toggle('negative', totalScore < 0);
+  showScorePop(delta);
+
+  if (isCorrect){
+    playCorrect();
+    vibrate(60);
+    setTimeout(() => {
+      state.idx++;
+      renderLadder();
+      if (state.idx >= sessionQuestions.length) endGame(true);
+      else showQuestion();
+    }, 1500);
+  } else {
+    playWrong();
+    vibrate([120, 60, 120]);
+    qCard.classList.add('shake');
+    setTimeout(() => qCard.classList.remove('shake'), 500);
+    setTimeout(() => endGame(false, 'Неверный ответ'), 1600);
+  }
+}
+
+function showScorePop(delta){
+  const el = document.createElement('span');
+  el.className = 'score-pop ' + (delta >= 0 ? 'plus' : 'minus');
+  el.textContent = (delta >= 0 ? '+' : '-') + Math.abs(delta);
+  scoreBox.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+/* ---------- Конец ---------- */
+function endGame(won, reason){
+  state.finished = true;
+  stopTimer();
+  renderLadder();
+
+  const scoreFinal = state.score;
+  const correctCount = won ? sessionQuestions.length : state.idx;
+  const rank = getRank(correctCount, sessionQuestions.length, won);
+
+  const screen = document.createElement('div');
+  screen.className = 'end-screen';
+
+  const card = document.createElement('div');
+  card.className = 'end-card';
+
+  const emoji = document.createElement('div');
+  emoji.className = 'end-emoji';
+  emoji.textContent = won ? '🏆' : (correctCount >= 6 ? '😎' : correctCount >= 3 ? '😅' : '😔');
+
+  const title = document.createElement('div');
+  title.className = 'end-title';
+  title.textContent = won ? 'ПОБЕДА!' : 'Игра окончена';
+
+  const scoreLabel = document.createElement('div');
+  scoreLabel.className = 'end-score-label';
+  scoreLabel.textContent = 'Итоговый счёт';
+
+  const scoreBig = document.createElement('div');
+  scoreBig.className = 'end-score';
+  scoreBig.textContent = String(scoreFinal);
+
+  const rankBox = document.createElement('div');
+  rankBox.className = 'end-rank';
+  const rankName = document.createElement('span');
+  rankName.className = 'rank-name';
+  rankName.textContent = rank.name;
+  const rankDesc = document.createElement('span');
+  rankDesc.textContent = rank.desc;
+  rankBox.appendChild(rankName);
+  rankBox.appendChild(rankDesc);
+
+  const desc = document.createElement('div');
+  desc.className = 'end-desc';
+  if (won){
+    desc.textContent = 'Правильных ответов: ' + sessionQuestions.length + ' из ' + sessionQuestions.length + '. Идеально!';
+  } else {
+    const why = reason || 'Ошибка';
+    desc.textContent = why + '. Правильных ответов: ' + correctCount + ' из ' + sessionQuestions.length + '.';
+  }
+
+  const btnPlay = document.createElement('button');
+  btnPlay.className = 'btn-play';
+  btnPlay.type = 'button';
+  btnPlay.textContent = 'Играть снова';
+  btnPlay.addEventListener('click', () => { screen.remove(); resetGame(); });
+
+  card.appendChild(emoji);
+  card.appendChild(title);
+  card.appendChild(scoreLabel);
+  card.appendChild(scoreBig);
+  card.appendChild(rankBox);
+  card.appendChild(desc);
+  card.appendChild(btnPlay);
+  screen.appendChild(card);
+  document.body.appendChild(screen);
+
+  if (won){
+    playWin();
+    vibrate([80, 40, 80, 40, 200]);
+    launchConfetti();
+  }
+}
+
+/* ---------- Конфетти ---------- */
+function launchConfetti(){
+  const canvas = document.createElement('canvas');
+  canvas.className = 'confetti-canvas';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(DPR, DPR);
+
+  const colors = ['#fbbf24', '#34d399', '#60a5fa', '#f472b6', '#a78bfa', '#f87171'];
+  const particles = [];
+  for (let i = 0; i < 140; i++){
+    particles.push({
+      x: Math.random() * W, y: -20 - Math.random() * H * 0.6,
+      vx: (Math.random() - 0.5) * 3, vy: Math.random() * 2.5 + 1.5,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2, vrot: (Math.random() - 0.5) * 0.25
+    });
+  }
+  let frames = 0;
+  function tick(){
+    frames++;
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.rot += p.vrot;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+      ctx.restore();
+    });
+    if (frames < 220) requestAnimationFrame(tick);
+    else canvas.remove();
+  }
+  tick();
+}
+
+/* ---------- Сброс ---------- */
+function resetGame(){
+  state = { idx: 0, score: 0, locked: false, finished: false, timerId: null, timeLeft: TIMER_SECONDS };
+  totalScore = 0;
+  scoreEl.textContent = '0';
+  scoreEl.classList.remove('negative');
+  sessionQuestions = buildSession();
+  renderLadder();
+  showQuestion();
+}
+
+btnReset.addEventListener('click', () => {
+  const screen = document.querySelector('.end-screen');
+  if (screen) screen.remove();
+  resetGame();
+});
+
+resetGame();
+</script>
+</body>
+</html>
